@@ -9,6 +9,7 @@ export default class Board {
     this.currentPlayerColor = "X";
   }
 
+  //game board
   render() {
     let line = "\n" + "+---".repeat(7) + "+" + "\n";
     let numColumns = 7;
@@ -27,13 +28,26 @@ export default class Board {
     );
   }
 
+  // Make the move
   makeMove(color: string, column: number): boolean {
+    if (this.matrix[0][column] !== " ") {
+      console.log("Kolumnen är full, försök igen.");
+      return false;
+    }
+
     for (let row = this.matrix.length - 1; row >= 0; row--) {
       if (this.matrix[row][column] === " ") {
         this.matrix[row][column] = color;
+        //Player toggle
+        this.currentPlayerColor = this.currentPlayerColor === "X" ? "O" : "X";
         return true;
       }
     }
     return false;
+  }
+
+  // Check if the board is full
+  isBoardFull(): boolean {
+    return this.matrix[0].every((cell) => cell !== " ");
   }
 }

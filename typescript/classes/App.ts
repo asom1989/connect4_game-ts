@@ -38,13 +38,17 @@ export default class App {
         console.log("Ogiltigt drag, försök igen.");
         continue;
       }
-      //Player toggle
+
+      // Make the move and check for win or full column
       if (this.board.makeMove(player.color, column)) {
-        this.board.currentPlayerColor =
-          this.board.currentPlayerColor === "X" ? "O" : "X";
+        // Check if the board is full
+        if (this.board.isBoardFull()) {
+          this.board.render();
+          console.log("\n Spelet är oavgjort! Alla kolumner är fulla \n");
+          break;
+        }
       } else {
         console.log("Kolumnen är full, försök igen.");
-        continue;
       }
     }
   }
