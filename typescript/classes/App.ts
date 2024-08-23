@@ -43,9 +43,19 @@ export default class App {
       if (this.board.makeMove(player.color, column)) {
         // Check if the board is full
         if (this.board.isBoardFull()) {
+          console.clear();
           this.board.render();
           console.log("\n Spelet är oavgjort! Alla kolumner är fulla \n");
-          break;
+          let playAgain = readlineSync.question(
+            "Vill ni spela igen? (ja/nej)? \n"
+          );
+          if (playAgain.toLowerCase() === "ja") {
+            this.board = new Board();
+            // this.createPlayers();
+            this.startGame();
+          } else {
+            break;
+          }
         }
       } else {
         console.log("Kolumnen är full, försök igen.");
