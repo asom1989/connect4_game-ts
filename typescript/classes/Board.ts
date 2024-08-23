@@ -1,10 +1,12 @@
 export default class Board {
   matrix: string[][];
+  currentPlayerColor: string;
 
   constructor() {
     this.matrix = [1, 2, 3, 4, 5, 6].map(() =>
       [1, 2, 3, 4, 5, 6, 7].map(() => " ")
     );
+    this.currentPlayerColor = "X";
   }
 
   render() {
@@ -23,5 +25,15 @@ export default class Board {
           .join(line) +
         line
     );
+  }
+
+  makeMove(color: string, column: number): boolean {
+    for (let row = this.matrix.length - 1; row >= 0; row--) {
+      if (this.matrix[row][column] === " ") {
+        this.matrix[row][column] = color;
+        return true;
+      }
+    }
+    return false;
   }
 }
