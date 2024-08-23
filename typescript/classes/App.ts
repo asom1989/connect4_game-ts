@@ -23,6 +23,29 @@ export default class App {
   }
 
   startGame() {
-    this.board.render();
+    while (true) {
+      // console.clear();
+      this.board.render();
+      let player =
+        this.board.currentPlayerColor === "X" ? this.playerX : this.playerO;
+      let move = readlineSync.question(
+        `Ange ditt drag ${player.color} ${player.name} - skriv in kolumn (1-7): `
+      );
+      let column = parseInt(move.trim()) - 1;
+
+      // Check if the move is valid
+      if (isNaN(column) || column < 0 || column >= 7) {
+        console.log("Ogiltigt drag, försök igen.");
+        continue;
+      }
+      //Player toggle
+      if (this.board.makeMove(player.color, column)) {
+        this.board.currentPlayerColor =
+          this.board.currentPlayerColor === "X" ? "O" : "X";
+      } else {
+        console.log("Kolumnen är full, försök igen.");
+        continue;
+      }
+    }
   }
 }
