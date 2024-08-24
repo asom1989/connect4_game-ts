@@ -31,6 +31,7 @@ export default class App {
       let move = readlineSync.question(
         `Ange ditt drag ${player.color} ${player.name} - skriv in kolumn (1-7): `
       );
+
       let column = parseInt(move.trim()) - 1;
 
       // Check if the move is valid
@@ -41,25 +42,45 @@ export default class App {
 
       // Make the move and check for win or full column
       if (this.board.makeMove(player.color, column)) {
-        // Check if the board is full
+        // Check for a winning move
+        if (this.board.winner) {
+          this.whoHasWon();
+          break;
+        }
+
+        // Check if the board is full or column is full
         if (this.board.isBoardFull()) {
           console.clear();
           this.board.render();
           console.log("\n Spelet är oavgjort! Alla kolumner är fulla \n");
-          let playAgain = readlineSync.question(
-            "Vill ni spela igen? (ja/nej)? \n"
-          );
-          if (playAgain.toLowerCase() === "ja") {
-            this.board = new Board();
-            // this.createPlayers();
-            this.startGame();
-          } else {
-            break;
-          }
+          break;
         }
       } else {
         console.log("Kolumnen är full, försök igen.");
       }
+    }
+
+    // Check if players want to play again
+    let playAgain = readlineSync.question("Vill ni spela igen? (ja/nej)? \n");
+    if (playAgain.toLowerCase() === "ja") {
+      this.board = new Board();
+      this.startGame();
+    } else {
+      console.log("Tack för att ni spelade!");
+    }
+  }
+
+  whoHasWon() {
+    console.clear();
+    this.board.render();
+    if (this.board.winner) {
+      let winningPlayer =
+        this.board.winner === "X" ? this.playerX : this.playerO;
+      console.log(
+        `Grattis ${winningPlayer.color}: ${winningPlayer.name} du vann!`
+      );
+    } else {
+      console.log("Tyvärr det blev oavgjort...");
     }
   }
 }
