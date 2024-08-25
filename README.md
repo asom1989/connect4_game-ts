@@ -4,7 +4,9 @@
 
 Detta är en terminalbaserad implementation av det klassiska Connect 4-spelet, skrivet i TypeScript. Spelet tillåter två spelare att tävla mot varandra eller spela mot en datorstyrd motståndare. Spelet är designat med objektorienterade principer och betonar komposition över arv.
 
+
 ![Connect 4 Spel Skärmdump](./assests/images/connect4-game.png)
+
 
 ## Funktioner
 
@@ -12,6 +14,7 @@ Detta är en terminalbaserad implementation av det klassiska Connect 4-spelet, s
 - Välj mellan en "dum" bot och en "smart" bot med olika svårighetsgrader.
 - Möjlighet att spela mellan två mänskliga spelare, en människa mot en bot eller två bots.
 - Spelet upptäcker vinster och oavgjorda resultat och tillåter omspelning.
+
 
 
 ## Installation
@@ -47,3 +50,4 @@ När du kör spelet kommer du att bli ombedd att välja vilken typ av spelare so
 Du kan välja spelartyp för båda spelarna, och spelet kommer att vägleda dig genom att göra drag och visa spelbrädet i terminalen.
 
 ![Spelet pågående](./assests/images/game-in-progress.png)
+
