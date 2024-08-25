@@ -1,6 +1,6 @@
 import readlineSync from "readline-sync";
 import Board from "./Board.js";
-import Player, { DumBot } from "./Player.js";
+import Player, { DumBot, SmartBot } from "./Player.js";
 
 export default class App {
   board: Board;
@@ -53,7 +53,7 @@ export default class App {
     if (type === "dum") {
       return new DumBot(playerName, color);
     } else if (type === "smart") {
-      return new Player(playerName, color);
+      return new SmartBot(playerName, color);
     } else {
       return new Player(playerName, color);
     }
