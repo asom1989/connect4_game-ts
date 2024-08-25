@@ -24,6 +24,7 @@ export default class App {
     this.playerO = this.createPlayer(playerOType, "O");
   }
 
+  // choose player type
   choosePlayerType(playerSymbol: string): string {
     const playerType = readlineSync
       .question(
@@ -68,7 +69,7 @@ export default class App {
 
       let column: number;
 
-      if (player instanceof DumBot) {
+      if (player instanceof DumBot || player instanceof SmartBot) {
         column = player.makeMove(this.board);
       } else {
         let move = readlineSync.question(
@@ -104,8 +105,8 @@ export default class App {
     }
 
     // Check if players want to play again
-    let playAgain = readlineSync.question("Vill ni spela igen? (ja/nej)? \n");
-    if (playAgain.toLowerCase() === "ja") {
+    let playAgain = readlineSync.question("Vill ni spela igen? (Y/N)? \n");
+    if (playAgain.toLowerCase() === "y") {
       this.board = new Board();
       this.startGame();
     } else {
