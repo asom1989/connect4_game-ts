@@ -10,22 +10,6 @@ export default class Player {
   }
 }
 
-// export class DumBot extends Player {
-//   constructor(name: string, color: string) {
-//     super(name, color);
-//   }
-
-//   makeMove(board: Board): number {
-//     const availableColumns = board.matrix[0]
-//       .map((cell, col) => (cell === " " ? col : null))
-//       .filter((col) => col !== null);
-
-//     return availableColumns[
-//       Math.floor(Math.random() * availableColumns.length)
-//     ];
-//   }
-// }
-
 // DumbBot class that makes random moves
 export class DumBot extends Player {
   constructor(name: string, color: string) {
@@ -50,24 +34,8 @@ export class SmartBot extends Player {
     super(name, color);
   }
 
-  // check win and prevent opponent from
-  findWinningMove(board: Board, color: string): number | null {
-    for (let col = 0; col < board.matrix[0].length; col++) {
-      if (board.matrix[0][col] === " ") {
-        const tempBoard = new Board();
-        tempBoard.matrix = board.matrix.map((row) => [...row]);
-
-        tempBoard.makeMove(color, col);
-
-        if (tempBoard.winCheck() === color) {
-          return col;
-        }
-      }
-    }
-    return null;
-  }
-
   makeMove(board: Board): number {
+    // check for a winning move
     for (let col = 0; col < board.matrix[0].length; col++) {
       if (board.matrix[0][col] === " ") {
         // Create a temporary board to simulate the move
@@ -98,7 +66,32 @@ export class SmartBot extends Player {
       }
     }
 
-    // If no winning move is found, use DumBot to make a random move
+    // Consider future moves and ensure it's a safe move
+    for (let col = 0; col < board.matrix[0].length; col++) {
+      if (board.matrix[0][col] === " ") {
+        const tempBoard = new Board();
+        tempBoard.matrix = board.matrix.map((row) => [...row]);
+
+        tempBoard.makeMove(this.color, col);
+
+        // Check if this move will allow the opponent to win the next round
+        let isSafeMove = true;
+        for (let oppCol = 0; oppCol < tempBoard.matrix[0].length; oppCol++) {
+          if (tempBoard.matrix[0][oppCol] === " ") {
+            tempBoard.makeMove(opponentColor, oppCol);
+            if (tempBoard.winCheck() === opponentColor) {
+              isSafeMove = false;
+              break;
+            }
+          }
+        }
+
+        if (isSafeMove) {
+          return col;
+        }
+      }
+    }
+    // If no winning move is found and is safe move, use DumBot to make a random move
     return new DumBot(this.name, this.color).makeMove(board);
   }
 }
