@@ -4,7 +4,7 @@
 
 Detta är en terminalbaserad implementation av det klassiska Connect 4-spelet, skrivet i TypeScript. Spelet tillåter två spelare att tävla mot varandra eller spela mot en datorstyrd motståndare. Spelet är designat med objektorienterade principer och betonar komposition över arv.
 
-![Connect 4 Spel Skärmdump](assets/images/connect4-game.png)
+![Connect 4 Spel Skärmdump](./assests/images/connect4-game.png)
 
 ## Funktioner
 
