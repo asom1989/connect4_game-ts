@@ -1,6 +1,6 @@
 import readlineSync from "readline-sync";
 import Board from "./Board.js";
-import Player from "./Player.js";
+import Player, { DumBot } from "./Player.js";
 
 export default class App {
   board: Board;
@@ -16,10 +16,47 @@ export default class App {
   createPlayers() {
     console.clear();
     console.log("Connect 4 Game\n");
-    const playerXName = readlineSync.question("Spelare X namn: ") || "X";
-    const playerOName = readlineSync.question("Spelare O namn: ") || "O";
-    this.playerX = new Player(playerXName, "X");
-    this.playerO = new Player(playerOName, "O");
+
+    const playerXType = this.choosePlayerType("X");
+    const playerOType = this.choosePlayerType("O");
+
+    this.playerX = this.createPlayer(playerXType, "X");
+    this.playerO = this.createPlayer(playerOType, "O");
+  }
+
+  choosePlayerType(playerSymbol: string): string {
+    const playerType = readlineSync
+      .question(
+        `\n Ange vilken typ av spelare ${playerSymbol} \n Person=> P, Dum Bot=> D Smart Bot=> S: `
+      )
+      .toLowerCase();
+
+    if (playerType !== "p" && playerType !== "d" && playerType !== "s") {
+      console.log("Ogiltigt drag, försök igen.");
+      return this.choosePlayerType(playerSymbol);
+    }
+
+    switch (playerType) {
+      case "d":
+        return "dum";
+      case "s":
+        return "smart";
+      default:
+        return "human";
+    }
+  }
+
+  createPlayer(type: string, color: string): Player {
+    const playerName =
+      readlineSync.question(`Spelare ${color}:s namn: `) || color;
+
+    if (type === "dum") {
+      return new DumBot(playerName, color);
+    } else if (type === "smart") {
+      return new Player(playerName, color);
+    } else {
+      return new Player(playerName, color);
+    }
   }
 
   startGame() {
