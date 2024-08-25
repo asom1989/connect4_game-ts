@@ -14,16 +14,31 @@ export class DumBot extends Player {
   constructor(name: string, color: string) {
     super(name, color);
   }
+
   makeMove(board: Board): number {
-    let validMoves = [];
-    for (let col = 0; col < board.matrix[0].length; col++) {
-      if (board.matrix[0][col] === " ") {
-        validMoves.push(col);
-      }
-    }
-    return validMoves[Math.floor(Math.random() * validMoves.length)];
+    const availableColumns = board.matrix[0]
+      .map((cell, col) => (cell === " " ? col : null))
+      .filter((col) => col !== null);
+
+    return availableColumns[
+      Math.floor(Math.random() * availableColumns.length)
+    ];
   }
 }
+// export class DumBot extends Player {
+//   constructor(name: string, color: string) {
+//     super(name, color);
+//   }
+//   makeMove(board: Board): number {
+//     let validMoves = [];
+//     for (let col = 0; col < board.matrix[0].length; col++) {
+//       if (board.matrix[0][col] === " ") {
+//         validMoves.push(col);
+//       }
+//     }
+//     return validMoves[Math.floor(Math.random() * validMoves.length)];
+//   }
+// }
 
 export class SmartBot extends Player {
   constructor(name: string, color: string) {

@@ -65,11 +65,17 @@ export default class App {
       this.board.render();
       let player =
         this.board.currentPlayerColor === "X" ? this.playerX : this.playerO;
-      let move = readlineSync.question(
-        `Ange ditt drag ${player.color} ${player.name} - skriv in kolumn (1-7): `
-      );
 
-      let column = parseInt(move.trim()) - 1;
+      let column: number;
+
+      if (player instanceof DumBot) {
+        column = player.makeMove(this.board);
+      } else {
+        let move = readlineSync.question(
+          `Ange ditt drag ${player.color} ${player.name} - skriv in kolumn (1-7): `
+        );
+        column = parseInt(move.trim()) - 1; //index
+      }
 
       // Check if the move is valid
       if (isNaN(column) || column < 0 || column >= 7) {
