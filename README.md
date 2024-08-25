@@ -20,7 +20,7 @@ Detta är en terminalbaserad implementation av det klassiska Connect 4-spelet, s
 
     ```bash
     git clone https://github.com/asom1989/connect4_game-ts.git
-    cd connect4-game
+    cd connect4_game_ts
     ```
 
 2. **Installera Beroenden:**
