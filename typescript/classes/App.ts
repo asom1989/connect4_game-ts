@@ -49,7 +49,7 @@ export default class App {
 
   createPlayer(type: string, color: string): Player {
     const playerName =
-      readlineSync.question(`Spelare ${color}:s namn: `) || color;
+      readlineSync.question(`\n Spelare ${color} namn: `) || color;
 
     if (type === "dum") {
       return new DumBot(playerName, color);
