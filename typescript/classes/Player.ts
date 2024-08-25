@@ -49,6 +49,24 @@ export class SmartBot extends Player {
   constructor(name: string, color: string) {
     super(name, color);
   }
+
+  // check win and prevent opponent from
+  findWinningMove(board: Board, color: string): number | null {
+    for (let col = 0; col < board.matrix[0].length; col++) {
+      if (board.matrix[0][col] === " ") {
+        const tempBoard = new Board();
+        tempBoard.matrix = board.matrix.map((row) => [...row]);
+
+        tempBoard.makeMove(color, col);
+
+        if (tempBoard.winCheck() === color) {
+          return col;
+        }
+      }
+    }
+    return null;
+  }
+
   makeMove(board: Board): number {
     for (let col = 0; col < board.matrix[0].length; col++) {
       if (board.matrix[0][col] === " ") {
@@ -64,6 +82,22 @@ export class SmartBot extends Player {
         }
       }
     }
+
+    // prevent the opponent from winning
+    const opponentColor = this.color === "X" ? "O" : "X";
+    for (let col = 0; col < board.matrix[0].length; col++) {
+      if (board.matrix[0][col] === " ") {
+        const tempBoard = new Board();
+        tempBoard.matrix = board.matrix.map((row) => [...row]);
+
+        tempBoard.makeMove(opponentColor, col);
+
+        if (tempBoard.winCheck() === opponentColor) {
+          return col;
+        }
+      }
+    }
+
     // If no winning move is found, use DumBot to make a random move
     return new DumBot(this.name, this.color).makeMove(board);
   }
