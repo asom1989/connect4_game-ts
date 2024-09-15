@@ -1,6 +1,6 @@
 import readlineSync from "readline-sync";
 import Board from "./Board.js";
-import Player from "./Player.js";
+import Player, { DumBot, SmartBot } from "./Player.js";
 
 export default class App {
   board: Board;
@@ -16,10 +16,48 @@ export default class App {
   createPlayers() {
     console.clear();
     console.log("Connect 4 Game\n");
-    const playerXName = readlineSync.question("Spelare X namn: ") || "X";
-    const playerOName = readlineSync.question("Spelare O namn: ") || "O";
-    this.playerX = new Player(playerXName, "X");
-    this.playerO = new Player(playerOName, "O");
+
+    const playerXType = this.choosePlayerType("X");
+    const playerOType = this.choosePlayerType("O");
+
+    this.playerX = this.createPlayer(playerXType, "X");
+    this.playerO = this.createPlayer(playerOType, "O");
+  }
+
+  // choose player type
+  choosePlayerType(playerSymbol: string): string {
+    const playerType = readlineSync
+      .question(
+        `\n Ange vilken typ av spelare ${playerSymbol} \n Person=> P, Dum Bot=> D Smart Bot=> S: `
+      )
+      .toLowerCase();
+
+    if (playerType !== "p" && playerType !== "d" && playerType !== "s") {
+      console.log("Ogiltigt drag, försök igen.");
+      return this.choosePlayerType(playerSymbol);
+    }
+
+    switch (playerType) {
+      case "d":
+        return "dum";
+      case "s":
+        return "smart";
+      default:
+        return "human";
+    }
+  }
+
+  createPlayer(type: string, color: string): Player {
+    const playerName =
+      readlineSync.question(`\n Spelare ${color} namn: `) || color;
+
+    if (type === "dum") {
+      return new DumBot(playerName, color);
+    } else if (type === "smart") {
+      return new SmartBot(playerName, color);
+    } else {
+      return new Player(playerName, color);
+    }
   }
 
   startGame() {
@@ -28,11 +66,17 @@ export default class App {
       this.board.render();
       let player =
         this.board.currentPlayerColor === "X" ? this.playerX : this.playerO;
-      let move = readlineSync.question(
-        `Ange ditt drag ${player.color} ${player.name} - skriv in kolumn (1-7): `
-      );
 
-      let column = parseInt(move.trim()) - 1;
+      let column: number;
+
+      if (player instanceof DumBot || player instanceof SmartBot) {
+        column = player.makeMove(this.board);
+      } else {
+        let move = readlineSync.question(
+          `Ange ditt drag ${player.color} ${player.name} - skriv in kolumn (1-7): `
+        );
+        column = parseInt(move.trim()) - 1; //index
+      }
 
       // Check if the move is valid
       if (isNaN(column) || column < 0 || column >= 7) {
@@ -61,8 +105,8 @@ export default class App {
     }
 
     // Check if players want to play again
-    let playAgain = readlineSync.question("Vill ni spela igen? (ja/nej)? \n");
-    if (playAgain.toLowerCase() === "ja") {
+    let playAgain = readlineSync.question("Vill ni spela igen? (Y/N)? \n");
+    if (playAgain.toLowerCase() === "y") {
       this.board = new Board();
       this.startGame();
     } else {
